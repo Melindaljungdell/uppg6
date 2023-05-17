@@ -18,7 +18,6 @@ export default function AddMovieForm (){
             alert("Du måste lägga till ett betyg")
         }
         else {
-            
             const newId = movies.length > 0 ? movies[movies.length - 1].id + 1 : 1;
 
             setMovies([...movies, {
@@ -29,31 +28,47 @@ export default function AddMovieForm (){
 
             inputRef.current.value="";
             grade.current.value= "0";
-
-
         }
     };
+
+    function deleteMovie(id){
+        setMovies(movies.filter((item) => item.id !== id));
+    }
+
+    function sortByTitle() {
+        const sortedByTitle = [...movies].sort((a, b) => a.title.localeCompare(b.title));
+        setMovies(sortedByTitle);
+    }
+
+    function sortByGrade() {
+        const sortedByGrade = [...movies].sort((a, b) => b.grade - a.grade);
+        setMovies(sortedByGrade);
+      }
 
     return (
     <div>
         <h3> Lägg till en film </h3>
         <hr></hr>
         <input className="form-control mb-3" placeholder="Titel här..." ref={inputRef} ></input>
-        <select className="form-control mb-3" ref={grade}>
+        <select className="form-control mb-1" ref={grade}>
             <option value="0">Välj betyg här...</option>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
-
         </select>
-        <button type= "button" class="btn btn-success mb-5" onClick={addMovie}>Spara film</button>
-        
+
+        <button type= "button" class="btn btn-success mr-2" onClick={addMovie}>Spara film</button>
+       
+        <h2> Inlagda filmer</h2>
+        <hr></hr>
 
         <ul className= "list-group">
-            {movies.map((item) => (< Movie key={item.id} item={item} /> ))}
+            {movies.map((item) => (< Movie key={item.id} item={item} deleteMovie={deleteMovie}/> ))}
         </ul>
-    
+
+        <button type= "button" class="btn btn-outline-success me-2 mt-2 mb-4" onClick={sortByTitle}>Sortera efter titel</button>
+        <button type= "button" class="btn btn-outline-success mt-2 mb-4" onClick={sortByGrade}>Sortera efter betyg</button>
     </div>)
 };
